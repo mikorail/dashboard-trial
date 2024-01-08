@@ -32,6 +32,7 @@
       padding: 10px;
       text-align: center;
       font-size: 18px;
+      line-height: 1;
     }
 
     #powerBiFrame {
@@ -111,17 +112,20 @@
       var div;
       var isDown = false;
 
-      const chatbotFrame = document.getElementById('chatbotFrame');
-      const chatbotFrameWidth = 400;
-      // 20px from right and bottom
-      chatbotFrame.style.left = `${window.innerWidth - chatbotFrameWidth - 20}px`;
-      chatbotFrame.style.bottom = "130px";
-
       const toggleButton = document.getElementById('toggleButton');
       toggleButton.style.position = "absolute";
       // 20px from right and bottom
       toggleButton.style.left = `${window.innerWidth - toggleButton.offsetWidth - 20}px`;
       toggleButton.style.bottom = "20px";
+
+      const chatbotFrame = document.getElementById('chatbotFrame');
+      const chatbotFrameWidth = 404;
+      const chatbotFrameHeight = 404;
+      const chatbotFrmaeMarginBottom = 20;
+      
+      // 20px from right and bottom
+      chatbotFrame.style.left = `${window.innerWidth - chatbotFrameWidth - 20}px`;
+      chatbotFrame.style.top = `${window.innerHeight - chatbotFrameHeight - 20 - toggleButton.offsetHeight - 38 - chatbotFrmaeMarginBottom}px`;
 
       toggleButton.onmousedown = onMouseDown;
       toggleButton.onclick = toggleChatbot;
@@ -155,13 +159,17 @@
         };
         // set the element's new position:
         const finalPositionX = mousePosition.x + toggleButtonOffset[0];
+        const finalPositionY = mousePosition.y + toggleButtonOffset[1];
         const chatbotFrameRect = chatbotFrame.getBoundingClientRect();
         const chatbotFrameStartX = chatbotFrameRect.x;
         const chatbotFrameEndX = chatbotFrameRect.x + chatbotFrameWidth;
+        const chatbotFrameStartY = chatbotFrameRect.y;
+        const chatbotFrameEndY = chatbotFrameRect.y + chatbotFrameHeight;
 
         // Move toggle button
         if (finalPositionX >= 20 && finalPositionX <= window.innerWidth - toggleButton.offsetWidth - 20) {
           toggleButton.style.left = finalPositionX + 'px';
+          toggleButton.style.top = finalPositionY + 'px';
         }
 
         // Move chatbot frame
@@ -172,6 +180,18 @@
           // Move to right
           chatbotFrame.style.left = (finalPositionX + toggleButton.offsetWidth - chatbotFrameWidth) + 'px';
         }
+
+        if (finalPositionY - chatbotFrameHeight - chatbotFrmaeMarginBottom - 38 >= 20) {
+          // Move to left
+          chatbotFrame.style.top = (finalPositionY - chatbotFrameHeight - chatbotFrmaeMarginBottom - 38) + 'px';
+          console.log(1);
+        } else if (finalPositionY + toggleButton.offsetHeight - chatbotFrameHeight >= 20 && finalPositionY + toggleButton.offsetHeight > chatbotFrameEndY && finalPositionY <= window.innerHeight - toggleButton.offsetHeight - chatbotFrameHeight - 20) {
+          // Move to right
+          chatbotFrame.style.top = ((finalPositionY) + toggleButton.offsetHeight - chatbotFrameHeight) + 'px';
+          console.log(2);
+        }
+
+
         // disable click event
         toggleButton.onclick = null;
       }
